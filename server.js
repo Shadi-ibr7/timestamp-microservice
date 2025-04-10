@@ -1,35 +1,32 @@
 const express = require('express');
 const app = express();
 
-// Racine
 app.get('/', (req, res) => {
   res.send('Timestamp Microservice');
 });
 
-// Endpoint API
 app.get('/api/:date?', (req, res) => {
-  let dateParam = req.params.date;
+  const input = req.params.date;
   let date;
 
-  if (!dateParam) {
+  if (!input) {
     date = new Date();
-  } else if (/^\d+$/.test(dateParam)) {
-    date = new Date(parseInt(dateParam));
+  } else if (/^\d+$/.test(input)) {
+    date = new Date(Number(input));
   } else {
-    date = new Date(dateParam);
+    date = new Date(input);
   }
 
   if (date.toString() === "Invalid Date") {
     return res.json({ error: "Invalid Date" });
   }
 
-  return res.json({
+  res.json({
     unix: date.getTime(),
     utc: date.toUTCString()
   });
 });
 
-// Lancer le serveur
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
