@@ -1,6 +1,13 @@
 const express = require('express');
 const app = express();
 
+// Forcer Content-Type JSON pour FreeCodeCamp
+app.use((req, res, next) => {
+  res.setHeader('Content-Type', 'application/json');
+  next();
+});
+
+
 app.get('/', (req, res) => {
   res.send('Timestamp Microservice');
 });
