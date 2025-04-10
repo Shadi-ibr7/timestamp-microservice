@@ -7,11 +7,12 @@ app.use((req, res, next) => {
   next();
 });
 
-
+// Racine
 app.get('/', (req, res) => {
   res.send('Timestamp Microservice');
 });
 
+// Endpoint principal
 app.get('/api/:date?', (req, res) => {
   const input = req.params.date;
   let date;
@@ -19,13 +20,13 @@ app.get('/api/:date?', (req, res) => {
   if (!input) {
     date = new Date();
   } else if (/^\d+$/.test(input)) {
-    date = new Date(Number(input));
+    date = new Date(parseInt(input));
   } else {
     date = new Date(input);
   }
 
-  if (date.toString() === "Invalid Date") {
-    return res.json({ error: "Invalid Date" });
+  if (date.toString() === 'Invalid Date') {
+    return res.json({ error: 'Invalid Date' });
   }
 
   res.json({
