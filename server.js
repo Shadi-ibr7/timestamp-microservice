@@ -1,42 +1,41 @@
 const express = require('express');
 const app = express();
 
-// Racine pour vérifier que le serveur tourne
+// Racine
 app.get('/', (req, res) => {
   res.send('Timestamp Microservice');
 });
 
-// Point d’entrée principal
+// Endpoint principal
 app.get('/api/:date?', (req, res) => {
-  let { date } = req.params;
+  const { date } = req.params;
   let parsedDate;
 
-  // Si aucun paramètre -> date actuelle
+  // Si aucun paramètre fourni
   if (!date) {
     parsedDate = new Date();
   } else {
-    // Si c’est un nombre uniquement => timestamp
+    // Vérifie si c’est un timestamp numérique
     if (/^\d+$/.test(date)) {
-      // Vérifie si c’est en secondes => convertir en millisecondes
       parsedDate = new Date(parseInt(date));
     } else {
       parsedDate = new Date(date);
     }
   }
 
-  // Gérer les cas invalides
+  // Vérifie si la date est invalide
   if (parsedDate.toString() === 'Invalid Date') {
     return res.json({ error: 'Invalid Date' });
   }
 
-  // Retourne réponse JSON correcte
+  // Renvoie les bons champs JSON
   res.json({
     unix: parsedDate.getTime(),
     utc: parsedDate.toUTCString()
   });
 });
 
-// Serveur
+// Lancement du serveur
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
