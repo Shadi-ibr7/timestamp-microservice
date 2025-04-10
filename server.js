@@ -9,8 +9,9 @@ app.use((req, res, next) => {
 
 // Racine
 app.get('/', (req, res) => {
-  res.send('Timestamp Microservice');
+  res.json({ message: 'Timestamp Microservice' });
 });
+
 
 // Endpoint principal
 app.get('/api/:date?', (req, res) => {
