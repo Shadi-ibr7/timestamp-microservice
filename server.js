@@ -1,38 +1,36 @@
 const express = require('express');
 const app = express();
 
-// Page d'accueil
+// Racine
 app.get('/', (req, res) => {
   res.send('Timestamp Microservice');
 });
 
-// Route API avec date facultative
+// Endpoint API
 app.get('/api/:date?', (req, res) => {
-  const input = req.params.date;
+  let dateParam = req.params.date;
   let date;
 
-  if (!input) {
+  if (!dateParam) {
     date = new Date();
-  } else if (!isNaN(input)) {
-    // Timestamp (nombre)
-    date = new Date(parseInt(input));
+  } else if (/^\d+$/.test(dateParam)) {
+    date = new Date(parseInt(dateParam));
   } else {
-    // Date string
-    date = new Date(input);
+    date = new Date(dateParam);
   }
 
-  if (date.toString() === 'Invalid Date') {
-    res.json({ error: 'Invalid Date' });
-  } else {
-    res.json({
-      unix: date.getTime(),
-      utc: date.toUTCString()
-    });
+  if (date.toString() === "Invalid Date") {
+    return res.json({ error: "Invalid Date" });
   }
+
+  return res.json({
+    unix: date.getTime(),
+    utc: date.toUTCString()
+  });
 });
 
-// Démarrer serveur
+// Lancer le serveur
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });
