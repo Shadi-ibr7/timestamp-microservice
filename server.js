@@ -1,19 +1,11 @@
 const express = require('express');
+const path = require('path');
 const app = express();
 
-// Forcer Content-Type JSON pour FreeCodeCamp
-app.use((req, res, next) => {
-  res.setHeader('Content-Type', 'application/json');
-  next();
-});
-
-// Racine
 app.get('/', (req, res) => {
-  res.json({ message: 'Timestamp Microservice' });
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-
-// Endpoint principal
 app.get('/api/:date?', (req, res) => {
   const input = req.params.date;
   let date;
@@ -38,5 +30,5 @@ app.get('/api/:date?', (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
